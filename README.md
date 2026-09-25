@@ -342,7 +342,7 @@ silkscreen**, so the layout follows these rules:
 | **Drill sizes:** 0.8mm (resistors, small capacitors, LEDs, TO-92, vias), 1.0mm (headers, IC socket, 1N4007, 0Ω links), 1.3–1.5mm (KF301, relay pins, 1N5822 at 1.3mm leads, C1), 3.2mm (M3 mounting holes). | Few tool changes |
 | **GND pour on the bottom only.** The top layer has no pour; its unused copper stays as floating copper and carries the engraved legend. | Faster milling and good grounding on the bottom. A top pour would reach pads that can't be soldered on top, and it would leave nowhere to engrave the legend. |
 | **SuperMini antenna** overhangs the board edge. | No copper needs pocketing out from under it. |
-| **Legend engraved into the top copper** from the `Mill_Legend` layer (User.1): part outlines, polarity and pin-1 marks, references, and the terminal labels BAT IN / BAT OUT / AC IN / AC OUT with + / − on the battery terminals. Generated so every line stays **at least 0.35mm clear of any top copper feature or hole** (plus half the line width), so an engrave can never cut a track or pad. | No silkscreen. The legend shows where each part goes. |
+| **Legend engraved into the top copper** from the `Mill_Legend` layer (User.1): part outlines, polarity and pin-1 marks, references, the terminal labels BAT IN / BAT OUT / AC IN / AC OUT with + / − on the battery terminals, and a small **ring beside every pad that must be soldered on top** (key: "○ = SOLDER TOP"). The rings are placed so each one is clearly nearest its own pad. Generated so every line stays **at least 0.35mm clear of any top copper feature or hole** (plus half the line width), so an engrave can never cut a track or pad. | No silkscreen. The legend shows where each part goes. |
 | After testing, **coat the board** (conformal coat or clear lacquer). | No solder mask, and the board lives in the panel for years. |
 
 **Routing:** I place the parts and then try routing. If that's poor, use the
@@ -424,8 +424,36 @@ create a connection that can't be soldered):
 2. **SMD (1206) parts are on the bottom** (F1, C5, C6, R7–R12, R15, R16): solder
    them first, on the bottom.
 3. **Axial parts and disc capacitors** (R1–R6, R13, R14, D1–D5, C2, C4, C7, C8):
-   solder on **both sides** where a top track meets the pad (20 pads). The
-   rest only need the bottom joint, but a top fillet does no harm.
+   mount them **1–2mm off the board** so the iron can reach the top pads, and
+   **solder every pad on both sides**. The holes aren't plated, so the top and
+   bottom pads are only joined by solder on the lead. Twenty of these pads carry
+   a top track, and for those the top joint is **essential** (some have no
+   bottom track at all). They're marked on the board with a small engraved
+   **ring (○ = SOLDER TOP)** next to the pad. Soldering the other top pads is
+   harmless and keeps the rule simple.
+
+   | Part | Type | Pads with a top track | Net |
+   |------|------|-----------------------|-----|
+   | R1 | Axial resistor | 1, 2 | U2A reset, GND |
+   | R2 | Axial resistor | 1 | U2B reset |
+   | R3 | Axial resistor | 1 | +5V |
+   | R4 | Axial resistor | 1 | +5V |
+   | R5 | Axial resistor | 1, 2 | U2A reset, U2A trigger |
+   | R6 | Axial resistor | 1, 2 | U2B reset, U2B trigger |
+   | R13 | Axial resistor | none | |
+   | R14 | Axial resistor | 2 | GND |
+   | D1 | Axial diode (1N5822) | 1 | D1 cathode |
+   | D2 | Axial diode (P6KE18A) | 1 | D1 cathode |
+   | D3 | Axial diode (1N5822) | none | |
+   | D4 | Axial diode (1N4007) | 1, 2 | +5V, D4 anode |
+   | D5 | Axial diode (1N4007) | 1 | +5V |
+   | C2 | Disc capacitor | 1 | D1 cathode |
+   | C4 | Disc capacitor | 1, 2 | +5V, GND |
+   | C7 | Disc capacitor | 1 | U2A trigger |
+   | C8 | Disc capacitor | 1 | U2B trigger |
+
+   Solder the top joint first, then the bottom. Afterwards, check continuity
+   from each ringed pad to the far end of its top track.
 4. **Everything else** (terminals, relays, socket, headers, TO-92s, electrolytics,
    LEDs) is soldered on the **bottom only**; their top pads are isolated rings.
 5. After testing, coat the board (no solder mask).

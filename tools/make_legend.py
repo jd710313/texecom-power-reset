@@ -26,6 +26,7 @@ MIN_PIECE = 0.8        # drop clipped fragments shorter than this
 TXT_H = 1.2            # reference text height
 LBL_H = 1.5            # terminal label height
 TXT_T = 0.15
+DOT_R = 0.5            # radius of the "solder on top too" ring beside a pad
 
 # hand-picked first-choice spots for crowded areas (x, y, angle); tried before the automatic search
 PREFERRED = {  # (x, y, angle, text height)
@@ -43,7 +44,7 @@ b.SetEnabledLayers(ls)
 
 # remove previous legend
 for d in [d for d in b.GetDrawings() if d.GetLayer() == LAYER]:
-    b.Remove(d)
+    b.Delete(d)
 
 
 def xy(v):
@@ -236,6 +237,7 @@ for (ref, pad), mark in PIN_MARKS.items():
     x, y = xy(p.GetPosition())
     report.append(('%s.%s %s' % (ref, pad, mark), try_place(mark, ring_cands(x, y - 3.3, 1.5), LBL_H, avoid_outlines=False)))
 
+
 # references: body centre first, then just outside the courtyard, then around
 for fp in sorted(fronts, key=lambda f: f.GetReference()):
     ref = fp.GetReference()
@@ -263,6 +265,97 @@ for fp in sorted(fronts, key=lambda f: f.GetReference()):
     if pos is None:  # last resort: allow crossing its own outline
         pos = try_place(ref, cands, TXT_H, avoid_outlines=False, owner=fp)
     report.append((ref, pos))
+
+# top-joint marks: a small engraved ring beside every pad that a top track runs into. Those pads must be
+# soldered on the top as well (no plated holes), so the ring tells the assembler where.
+def add_ring(x, y):
+    c = pcbnew.PCB_SHAPE(b)
+    c.SetShape(pcbnew.SHAPE_T_CIRCLE)
+    c.SetCenter(pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y)))
+    c.SetEnd(pcbnew.VECTOR2I(pcbnew.FromMM(x + DOT_R), pcbnew.FromMM(y)))
+    c.SetWidth(pcbnew.FromMM(LINE_W))
+    c.SetLayer(LAYER)
+    b.Add(c)
+
+
+def place_ring(cands, own, avoid_outlines=True, distinct=1.0):
+    """First clear candidate that is clearly nearer its own pad than any other top pad."""
+    for (x, y) in cands:
+        g = Point(x, y).buffer(DOT_R + LINE_W / 2)
+        if not allowed.contains(g):
+            continue
+        if any(g.buffer(0.3).intersects(p) for p in placed):
+            continue
+        if avoid_outlines and g.intersects(outline_geom):
+            continue
+        pt = Point(x, y)
+        own_gap = own.distance(pt)
+        if any(pg.distance(pt) < own_gap + distinct for pg in top_pad_geoms if pg is not own):
+            continue
+        add_ring(x, y)
+        placed.append(g)
+        return (x, y)
+    return None
+
+
+top_pad_geoms = []
+pad_geom = {}
+for p in b.GetPads():
+    if p.IsOnLayer(pcbnew.F_Cu) and p.GetDrillSize().x:
+        sps = pcbnew.SHAPE_POLY_SET()
+        p.TransformShapeToPolygon(sps, pcbnew.F_Cu, 0, 5000, pcbnew.ERROR_OUTSIDE)
+        g = unary_union(sps_polys(sps))
+        top_pad_geoms.append(g)
+        pad_geom[p.m_Uuid.AsString()] = g
+
+
+top_ends = [(t.GetStart(), t.GetEnd()) for t in b.GetTracks()
+            if t.Type() == pcbnew.PCB_TRACE_T and t.GetLayer() == pcbnew.F_Cu]
+top_joint_pads = []
+for fp in fronts:
+    for p in fp.Pads():
+        if p.GetDrillSize().x and any(p.HitTest(e) for se in top_ends for e in se):
+            top_joint_pads.append(p)
+for p in sorted(top_joint_pads, key=lambda q: (q.GetParentFootprint().GetReference(), q.GetNumber())):
+    x, y = xy(p.GetPosition())
+    half = max(p.GetSize().x, p.GetSize().y) / 2 / S
+    cands = []
+    for k in range(0, 16):
+        d = half + MARGIN + DOT_R + 0.2 + k * 0.25
+        cands += [(x + d * math.cos(math.radians(a)), y + d * math.sin(math.radians(a))) for a in range(0, 360, 15)]
+    own = pad_geom[p.m_Uuid.AsString()]
+    pos = (place_ring(cands, own) or place_ring(cands, own, avoid_outlines=False)
+           or place_ring(cands, own, avoid_outlines=False, distinct=0.4))
+    report.append(('top %s.%s' % (p.GetParentFootprint().GetReference(), p.GetNumber()),
+                   None if pos is None else (pos[0], pos[1], 0)))
+
+def key_text(x, y):
+    t = make_text('= SOLDER TOP', x + DOT_R + 0.6, y, TXT_H, 0)
+    t.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    return t
+
+
+# key for the top-joint rings: "o = SOLDER TOP", in the first free spot scanning up from the bottom-right
+key = None
+# keep the key out from under the M3 screw heads (about 5.5mm across, plus a washer)
+screw_heads = unary_union([Point(xy(f.GetPosition())).buffer(3.5) for f in b.GetFootprints()
+                           if f.GetReference().startswith('MH')])
+for yi in range(0, 120):
+    y = bb.GetBottom() / S - EDGE_INSET - 1.0 - yi * 0.5
+    for xi in range(0, 160):
+        x = bb.GetRight() / S - EDGE_INSET - 8.0 - xi * 0.5
+        t = key_text(x, y)
+        g = unary_union([text_geom(t), Point(x, y).buffer(DOT_R + LINE_W / 2)])
+        if (allowed.contains(g) and not g.intersects(outline_geom) and not g.intersects(screw_heads)
+                and not any(g.buffer(0.3).intersects(p) for p in placed)):
+            key = (x, y)
+            break
+    if key:
+        break
+if key:
+    b.Add(key_text(*key))
+    add_ring(*key)
+report.append(('ring key', None if key is None else (key[0], key[1], 0)))
 
 b.Save(PCB)
 print('outline pieces', len(kept), 'segments', n_seg)
