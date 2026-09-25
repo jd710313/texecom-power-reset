@@ -144,6 +144,23 @@ for fp in fronts:
         if g.GetClass() == 'PCB_SHAPE' and g.GetLayer() == src:
             lines += shape_lines(g)
 
+# USB direction mark for the SuperMini (U3): an arrow along the module's centre line pointing at the USB-C end
+# (the pin 1 / pin 9 end of the footprint), so the module can't be fitted the wrong way round.
+u3 = b.FindFootprintByReference('U3')
+usb_mark = None
+if u3 is not None:
+    c0 = xy(u3.GetPosition())
+    e1, e9 = xy(u3.FindPadByNumber('1').GetPosition()), xy(u3.FindPadByNumber('9').GetPosition())
+    mid = ((e1[0] + e9[0]) / 2, (e1[1] + e9[1]) / 2)
+    dl = math.hypot(mid[0] - c0[0], mid[1] - c0[1])
+    d = ((mid[0] - c0[0]) / dl, (mid[1] - c0[1]) / dl)
+    nrm = (-d[1], d[0])
+    tip = (c0[0] + d[0] * (dl + 0.5), c0[1] + d[1] * (dl + 0.5))
+    tail = (c0[0] + d[0] * (dl - 5.0), c0[1] + d[1] * (dl - 5.0))
+    head = [(tip[0] - d[0] * 1.5 + nrm[0] * s_, tip[1] - d[1] * 1.5 + nrm[1] * s_) for s_ in (1.0, -1.0)]
+    lines += [[tail, tip], [head[0], tip, head[1]]]
+    usb_mark = (c0, d, dl)
+
 kept = []
 for pl in lines:
     geom = LineString(pl).intersection(allowed)
@@ -334,6 +351,17 @@ def key_text(x, y):
     t.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
     return t
 
+
+# "USB" text next to the U3 arrow, reading along the module
+if usb_mark:
+    (c0, d, dl) = usb_mark
+    ang = -math.degrees(math.atan2(d[1], d[0]))
+    ang = ang % 360
+    if 90 < ang <= 270:
+        ang -= 180
+    cands = [(c0[0] + d[0] * k + (-d[1]) * o, c0[1] + d[1] * k + d[0] * o, ang)
+             for k in (dl - 3.0, dl - 4.0, dl - 2.0, dl - 5.0) for o in (2.6, -2.6, 3.4, -3.4)]
+    report.append(('USB', try_place('USB', cands, LBL_H)))
 
 # key for the top-joint rings: "o = SOLDER TOP", in the first free spot scanning up from the bottom-right
 key = None

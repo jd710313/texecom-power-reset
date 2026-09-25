@@ -138,9 +138,9 @@ checks that AC is present before it resets (see below).
                │               │                             └─► relay coils, LEDs
                └───────────────┼──────────────► K1 COM ─ NC ─► J2 BAT OUT +
                                │
- GPIO3 ─ R9 1k ─┬─ reset ─┐                                          +5V
+ GPIO4 ─ R9 1k ─┬─ reset ─┐                                          +5V
                 └─ RC ────┴─► U2 ch1 (7 s max) ─ Q ─ R7 1k ─► Q1 2N2222A ─► K1 coil ┤ D4 flyback, D6 LED
- GPIO4 ─ R10 1k ─┬─ reset ─┐                                         +5V
+ GPIO3 ─ R10 1k ─┬─ reset ─┐                                         +5V
                  └─ RC ────┴─► U2 ch2 (7 s max) ─ Q ─ R8 1k ─► Q2 2N2222A ─► K2 coil ┤ D5 flyback, D7 LED
 
  J3 AC IN ~A ─► K2 COM ─ NC ─► J4 AC OUT ~A        J3 ~B ─► J4 ~B (straight through)
@@ -172,17 +172,28 @@ checks that AC is present before it resets (see below).
 
 - Plugs into **two 1×8 female headers**, so it can be removed for flashing or
   replacement.
-- Relay control pins: **GPIO3 → channel 1 (K1, battery)** and **GPIO4 →
-  channel 2 (K2, AC)**.
+- Relay control pins: **GPIO4 → channel 1 (K1, battery)** and **GPIO3 →
+  channel 2 (K2, AC)**. (Swapped from the first draft when the SuperMini
+  footprint was corrected; this pairing keeps the tracks from crossing.)
   - Neither is a strapping pin (unlike GPIO2, 8 and 9), nor a USB pin (18, 19)
     or the UART0 pin that prints the boot log (GPIO21).
+  - Both are plain inputs with **no internal pull-up at reset** (ESP32-C3
+    datasheet, Table 2-1), so they can't pulse a relay while the ESP boots.
+    GPIO6 (MTCK) and GPIO9 do have a weak pull-up at reset and are avoided.
 - R1 and R2: **100k pull-downs** on the 74HCT4538 side of R9/R10. They hold the
   resets low (relays off) while the ESP is booting, unpowered or removed.
 - R9 and R10: **1k series resistors** between each GPIO and the 74HCT4538.
   They protect the ESP when the 5V rail is off. See the note in §3.
-- Onboard blue LED (GPIO8, active low) is used as the Tasmota WiFi status LED.
-- Keep the SuperMini's antenna end at the board edge, with no copper under it,
-  **away from the relays** and the panel's Ricochet receiver.
+- The V2 SuperMini's onboard LED is a **WS2812 RGB LED on GPIO8** (a strapping
+  pin). It isn't used as a status LED; leave GPIO8 unassigned in Tasmota.
+- **Orientation:** the module mounts **component (button) side up** with its
+  **USB-C at the right-hand board edge** (engraved "USB →" on the legend), so it
+  can be flashed in place. The antenna end therefore points into the board,
+  about 8.5mm above the copper on the header sockets. If WiFi is weak inside the
+  panel housing (especially a metal one), use the V2's **IPEX external-antenna
+  option** (move the small antenna-select link as described on the module's
+  info page) and fit the optional 2.4GHz antenna from the BOM (Communica, IPEX
+  on a lead).
 
 ### 3. Hardware timeout: 74HCT4538 dual monostable (at 5V)
 
@@ -303,8 +314,8 @@ PTC (which sits downstream) can do anything.
   and the relay module, J5, J6, J7 and the control lead out. The housing
   dimensions are still open.
 - **Placement:** J1–J4 along one edge with K1/K2 right behind them, so the
-  battery and AC paths are short. The SuperMini sits at the opposite edge with
-  its antenna overhanging, as far from the relays as possible.
+  battery and AC paths are short. The SuperMini sits at the opposite edge,
+  as far from the relays as possible, with its USB-C at the board edge.
 - **Heavy-current traces** (J1 → K1 → J2, J3 → K2 → J4, and the BAT− and AC ~B
   straight-throughs): at least **2mm wide** on 1oz copper (about 3A at
   10°C rise), or copper pours.
@@ -316,7 +327,7 @@ PTC (which sits downstream) can do anything.
 - **Through-hole wherever possible:** axial resistors and diodes, radial
   capacitors, TO-92, DIP-16 in a socket, 2.54mm headers. **1206 SMD is
   acceptable** (hand-solderable) and is used for F1, C5/C6 and several resistors.
-- GND pour on the **bottom layer only**, except the antenna keep-out. The top
+- GND pour on the **bottom layer only**. The top
   layer carries only tracks, pads and the engraved legend (§6a).
 - 2 × M3 mounting holes.
 
@@ -341,7 +352,7 @@ silkscreen**, so the layout follows these rules:
 | **Extra clearance around pads:** a custom KiCad rule of **at least 0.8mm from any pad to other copper** (tracks at 0.4mm to each other), plus **component spacing** that keeps neighbouring pads and bodies well clear. | The user prefers wider isolation around pads for easy hand soldering and no solder bridges. FlatCAM's multi-pass isolation needs room to widen the cut around pads without eating into neighbouring traces. |
 | **Drill sizes:** 0.8mm (resistors, small capacitors, LEDs, TO-92, vias), 1.0mm (headers, IC socket, 1N4007, 0Ω links), 1.3–1.5mm (KF301, relay pins, 1N5822 at 1.3mm leads, C1), 3.2mm (M3 mounting holes). | Few tool changes |
 | **GND pour on the bottom only.** The top layer has no pour; its unused copper stays as floating copper and carries the engraved legend. | Faster milling and good grounding on the bottom. A top pour would reach pads that can't be soldered on top, and it would leave nowhere to engrave the legend. |
-| **SuperMini antenna** overhangs the board edge. | No copper needs pocketing out from under it. |
+| **SuperMini USB-C at the board edge** (antenna end inward). | Flashing in place, and it let the corrected footprint keep the proven routing. Use the V2's external-antenna option if WiFi is weak. |
 | **Legend engraved into the top copper** from the `Mill_Legend` layer (User.1): part outlines, polarity and pin-1 marks, references, the terminal labels BAT IN / BAT OUT / AC IN / AC OUT with + / − on the battery terminals, and a small **ring beside every pad that must be soldered on top** (key: "○ = SOLDER TOP"). The rings are placed so each one is clearly nearest its own pad. Generated so every line stays **at least 0.35mm clear of any top copper feature or hole** (plus half the line width), so an engrave can never cut a track or pad. | No silkscreen. The legend shows where each part goes. |
 | After testing, **coat the board** (conformal coat or clear lacquer). | No solder mask, and the board lives in the panel for years. |
 
@@ -356,7 +367,7 @@ the rules above as design rules.
 | `texecom-power-reset.kicad_pro` / `.kicad_sch` | Project and schematic (A3, single sheet). **Drawn with wires**; only GND, +5V and +5V_MCU use power symbols or labels. |
 | `texecom-power-reset-schematic.pdf` | Schematic PDF export |
 | `texecom-power-reset.kicad_sym` | Project symbols: ESP32-C3-SuperMini (from the esp32c3-button-led project), Pololu_S9V11E2F5 |
-| `texecom-power-reset.pretty/` | Project footprints: ESP32-C3-SuperMini, Pololu_S9V11E2x (pin order VOUT, GND, VIN, EN per the Pololu drawing) |
+| `texecom-power-reset.pretty/` | Project footprints: ESP32-C3-SuperMini (**pin rows corrected 2026-09-25**: the first version was mirrored, which would have put 5V and GND on GPIO5/GPIO6 with the module button side up), Pololu_S9V11E2x (pin order VOUT, GND, VIN, EN per the Pololu drawing) |
 | `backup/` | Earlier schematic versions (label-connected, and wired with the off-board relay module), kept for reference only. **Not** used for the PCB. |
 | `project-summary.html` | One-page visual project summary (self-contained HTML, open in a browser) |
 | `fab/` | **Reference export** (maintained with the design): Gerbers F.Cu / B.Cu / Edge.Cuts / Mill_Legend, Excellon drill, drill map |
@@ -365,8 +376,8 @@ the rules above as design rules.
 | `docs/` | Copper renders (top includes the legend), 3D renders and the assembly drawing |
 | `tools/make_legend.py` | Regenerates the `Mill_Legend` engrave layer, kept clear of all top copper |
 
-**Layout:** power path across the top. **Channel 2** (GPIO4, K2 AC relay) is in
-the middle band and **channel 1** (GPIO3, K1 battery relay) in the lower band.
+**Layout:** power path across the top. **Channel 2** (GPIO3, K2 AC relay) is in
+the middle band and **channel 1** (GPIO4, K1 battery relay) in the lower band.
 This order avoids wire crossings from the SuperMini. J3/J4 (AC) sit next to K2,
 and J2 (BAT OUT) next to K1. The BAT_IN+ wire runs from J1 over the top and down
 the right side to K1 COM.
@@ -388,7 +399,7 @@ intentional ones (relay NO, Q̅ outputs, Pololu EN, unused SuperMini pins).
 | Item | Value |
 |------|-------|
 | Board | **92 × 70mm**, 2 layers, 2 × M3 holes (top-left, bottom-right) |
-| Placement | Terminals along the bottom edge: **J4 AC OUT, J3 AC IN, J2 BAT OUT, J1 BAT IN** (left to right). K2 (AC) above J4/J3, K1 (battery) above J2/J1. Drivers and LEDs above the relays, 74HCT4538 top-middle, SuperMini top-right (antenna at the right edge, with a no-copper keepout under it), power section bottom-right. |
+| Placement | Terminals along the bottom edge: **J4 AC OUT, J3 AC IN, J2 BAT OUT, J1 BAT IN** (left to right). K2 (AC) above J4/J3, K1 (battery) above J2/J1. Drivers and LEDs above the relays, 74HCT4538 top-middle, SuperMini top-right (button side up, **USB-C at the right-hand edge**, antenna end pointing inward), power section bottom-right. |
 | Routing | KiCad routing tools (drandyhaas), with a milling floor: **0.8mm clearance** everywhere (1.0mm for 16VAC), 0.7mm signal tracks, 1.0mm supply tracks, 2.0mm battery/AC tracks. GND by a **bottom-layer pour only**, plus a few GND tracks. |
 | Vias | **16 wire-link vias** (0.8mm drill, 2.0mm pad): solder a short wire on both sides. |
 | Legend | `Mill_Legend` layer (User.1), engraved into the top copper with the V-bit. See *Engraving the legend* below. |
@@ -456,6 +467,11 @@ create a connection that can't be soldered):
    from each ringed pad to the far end of its top track.
 4. **Everything else** (terminals, relays, socket, headers, TO-92s, electrolytics,
    LEDs) is soldered on the **bottom only**; their top pads are isolated rings.
+   - **SuperMini (U3):** solder male pins to the module and two 1×8 female
+     headers to the board (bottom side). Plug the module in **button side up,
+     USB-C towards the right-hand board edge**, following the engraved
+     "USB →" arrow. Before plugging it in, check that the square pad (pin 1,
+     5V) is at the USB end of the row nearest the relays.
 5. After testing, coat the board (no solder mask).
 
 **Engraving the legend (FlatCAM):**
@@ -482,9 +498,9 @@ unpowered from the battery; D3 isolates USB from the relay rail).
 
 | GPIO | Function |
 |------|----------|
-| GPIO3 | Relay 1 (battery, K1) |
-| GPIO4 | Relay 2 (AC, K2) |
-| GPIO8 | LedLink_i (onboard LED, active low) |
+| GPIO4 | Relay 1 (battery, K1) |
+| GPIO3 | Relay 2 (AC, K2) |
+| GPIO8 | None (WS2812 RGB LED and strapping pin; leave unassigned) |
 
 Console:
 
@@ -500,7 +516,9 @@ Backlog PowerOnState 0; PulseTime1 30; PulseTime2 35; Sleep 100; FriendlyName1 P
 | `Sleep 100` | Dynamic sleep for lower average current while WiFi stays connected. |
 
 If the SuperMini has trouble holding a WiFi connection (a known issue with some
-SuperMini antenna layouts), try `WifiPower 8.5`.
+SuperMini antenna layouts), try `WifiPower 8.5`. On this board the antenna end
+points inward over the PCB, so if the signal inside the panel housing is poor,
+switch the V2 to its IPEX external antenna.
 
 ### 8. Home Assistant script (example)
 
@@ -591,3 +609,4 @@ The full BOM and sourcing tracker (on hand / Micro Robotics / Communica) is in
 | 0.8mm clearance on every net class (not just around pads) | Wide isolation for easy hand soldering and FlatCAM multi-pass isolation. The board is not dense enough to need less. |
 | ~~GND by pour on both layers~~ (superseded below), plus a `zone_connection none` rule on F.Cu for covered pads | Keeps DRC connectivity honest for a board without plated holes. |
 | **GND pour on the bottom only; the top copper carries an engraved legend** (2026-09-25) | The top pour added little: GND is well connected on the bottom, and three pads needed only short re-routes (one extra via). Without it, the free top copper can take a V-bit legend (outlines, references, BAT/AC terminal labels) to guide assembly. The legend is pre-clipped 0.35mm clear of all top copper, so it can't cut a track or pad. |
+| **SuperMini footprint corrected and rotated 180°; GPIO4 = channel 1, GPIO3 = channel 2** (2026-09-25) | The first footprint had its pin rows mirrored (it matched the module's bottom-view pinout drawing), so the module would only have fitted button side down. With the rows corrected, rotating the module 180° puts GPIO4/GPIO3 exactly on the old IO pads and 5V/GND next to D3 and the main GND pour, so the proven routing stays (DRC clean, still 16 vias). Keeping the antenna at the edge instead would have put 5V and GND against the board edge and split the GND pour. The trade-off is the antenna end pointing inward; the V2's IPEX external-antenna option covers weak WiFi. GPIO3 and GPIO4 have no pull-up at reset. |

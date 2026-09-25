@@ -254,7 +254,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "A"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -770,13 +770,18 @@
       {
         "filename": "texecom-power-reset.kicad_sch",
         "name": "texecom-power-reset",
-        "uuid": "00000000-0000-0000-0000-000000000000"
+        "uuid": "d500e0c0-8477-4b47-814f-16e67914e768"
       }
     ],
     "used_designators": "",
     "variants": []
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "d500e0c0-8477-4b47-814f-16e67914e768",
+      "texecom-power-reset"
+    ]
+  ],
   "text_variables": {},
   "tuning_profiles": {
     "meta": {

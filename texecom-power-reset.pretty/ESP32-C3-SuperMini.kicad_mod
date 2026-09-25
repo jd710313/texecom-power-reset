@@ -3,7 +3,7 @@
   (generator "kicad-mcp")
   (generator_version "9.0")
   (layer "F.Cu")
-  (descr "ESP32-C3 SuperMini module, 2x8 THT 2.54mm, 15.24mm row spacing, body 22.5x18mm. Pin 1 (5V) is square, USB-C connector at the pin1/pin9 end.")
+  (descr "ESP32-C3 SuperMini module, 2x8 THT 2.54mm, 15.24mm row spacing, body 22.5x18mm. Pin 1 (5V) is square, USB-C connector at the pin1/pin9 end. Top view (component side up, USB at the top): pins 1-8 (5V, GND, 3V3, IO4-IO0) on the right, pins 9-16 (IO5-IO21) on the left. Corrected 2026-09-25 (rows were mirrored).")
   (tags "ESP32 ESP32-C3 SuperMini module THT")
 
   (property "Reference" "REF**" (at 0 -12.5 0)
@@ -50,7 +50,7 @@
   )
 
   (pad "1" thru_hole rect
-    (at -7.62 -8.89)
+    (at 7.62 -8.89)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -58,7 +58,7 @@
   )
 
   (pad "2" thru_hole circle
-    (at -7.62 -6.35)
+    (at 7.62 -6.35)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -66,7 +66,7 @@
   )
 
   (pad "3" thru_hole circle
-    (at -7.62 -3.81)
+    (at 7.62 -3.81)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -74,7 +74,7 @@
   )
 
   (pad "4" thru_hole circle
-    (at -7.62 -1.27)
+    (at 7.62 -1.27)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -82,7 +82,7 @@
   )
 
   (pad "5" thru_hole circle
-    (at -7.62 1.27)
+    (at 7.62 1.27)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -90,7 +90,7 @@
   )
 
   (pad "6" thru_hole circle
-    (at -7.62 3.81)
+    (at 7.62 3.81)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -98,7 +98,7 @@
   )
 
   (pad "7" thru_hole circle
-    (at -7.62 6.35)
+    (at 7.62 6.35)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -106,7 +106,7 @@
   )
 
   (pad "8" thru_hole circle
-    (at -7.62 8.89)
+    (at 7.62 8.89)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -114,7 +114,7 @@
   )
 
   (pad "9" thru_hole circle
-    (at 7.62 -8.89)
+    (at -7.62 -8.89)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -122,7 +122,7 @@
   )
 
   (pad "10" thru_hole circle
-    (at 7.62 -6.35)
+    (at -7.62 -6.35)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -130,7 +130,7 @@
   )
 
   (pad "11" thru_hole circle
-    (at 7.62 -3.81)
+    (at -7.62 -3.81)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -138,7 +138,7 @@
   )
 
   (pad "12" thru_hole circle
-    (at 7.62 -1.27)
+    (at -7.62 -1.27)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -146,7 +146,7 @@
   )
 
   (pad "13" thru_hole circle
-    (at 7.62 1.27)
+    (at -7.62 1.27)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -154,7 +154,7 @@
   )
 
   (pad "14" thru_hole circle
-    (at 7.62 3.81)
+    (at -7.62 3.81)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -162,7 +162,7 @@
   )
 
   (pad "15" thru_hole circle
-    (at 7.62 6.35)
+    (at -7.62 6.35)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
@@ -170,7 +170,7 @@
   )
 
   (pad "16" thru_hole circle
-    (at 7.62 8.89)
+    (at -7.62 8.89)
     (size 1.7 1.7)
     (drill 1)
     (layers "*.Cu" "*.Mask")
