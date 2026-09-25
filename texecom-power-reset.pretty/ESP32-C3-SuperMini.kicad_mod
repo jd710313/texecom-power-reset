@@ -1,0 +1,180 @@
+(footprint "ESP32-C3-SuperMini"
+  (version 20241229)
+  (generator "kicad-mcp")
+  (generator_version "9.0")
+  (layer "F.Cu")
+  (descr "ESP32-C3 SuperMini module, 2x8 THT 2.54mm, 15.24mm row spacing, body 22.5x18mm. Pin 1 (5V) is square, USB-C connector at the pin1/pin9 end.")
+  (tags "ESP32 ESP32-C3 SuperMini module THT")
+
+  (property "Reference" "REF**" (at 0 -12.5 0)
+    (layer "F.SilkS")
+    (uuid "869067b8-572a-4cc8-9652-7811722eabf5")
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (property "Value" "ESP32-C3-SuperMini" (at 0 12.5 0)
+    (layer "F.Fab")
+    (uuid "65fd23c6-3d81-465a-8e65-cedb2298d751")
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (property "Datasheet" "" (at 0 0 0)
+    (layer "F.Fab")
+    (uuid "cd1207e4-4b02-47a2-b080-0b836ee52575")
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+
+  (fp_rect
+    (start -9.3 -11.6)
+    (end 9.3 11.6)
+    (stroke (width 0.05) (type default))
+    (fill none)
+    (layer "F.CrtYd")
+    (uuid "b9f1597c-dcc3-453d-9484-13e07acbd217")
+  )
+
+  (fp_rect
+    (start -9 -11.26)
+    (end 9 11.26)
+    (stroke (width 0.15) (type default))
+    (fill none)
+    (layer "F.SilkS")
+    (uuid "d40c326e-2249-4885-a2bc-dfb42a6139f4")
+  )
+
+  (fp_rect
+    (start -9 -11.26)
+    (end 9 11.26)
+    (stroke (width 0.1) (type default))
+    (fill none)
+    (layer "F.Fab")
+    (uuid "171655bb-101d-47a3-a11c-7455f3304cf2")
+  )
+
+  (pad "1" thru_hole rect
+    (at -7.62 -8.89)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "1754a551-f262-449b-b50a-b04471dadb03")
+  )
+
+  (pad "2" thru_hole circle
+    (at -7.62 -6.35)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "c5513426-0e8a-4fab-b4cd-d40ae0af54b2")
+  )
+
+  (pad "3" thru_hole circle
+    (at -7.62 -3.81)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "374fb4e0-a780-46d6-aafc-5d2b394624c8")
+  )
+
+  (pad "4" thru_hole circle
+    (at -7.62 -1.27)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "bf45d69d-ea3e-4e73-a6cc-f2e35d135b58")
+  )
+
+  (pad "5" thru_hole circle
+    (at -7.62 1.27)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "c1f123c7-14de-47d4-87c9-11e54c6e756e")
+  )
+
+  (pad "6" thru_hole circle
+    (at -7.62 3.81)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "3a71806d-d30b-46cc-b35f-98d48cdb12f7")
+  )
+
+  (pad "7" thru_hole circle
+    (at -7.62 6.35)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "33bae034-b65d-46f1-b869-eab195588b50")
+  )
+
+  (pad "8" thru_hole circle
+    (at -7.62 8.89)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "24f68e69-999b-43c9-a94a-6c24c11e2048")
+  )
+
+  (pad "9" thru_hole circle
+    (at 7.62 -8.89)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "9f291d95-481f-4022-9172-9f27f3d6ecff")
+  )
+
+  (pad "10" thru_hole circle
+    (at 7.62 -6.35)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "dd9b3575-7bcb-4ba1-acb0-ff5ee04ab198")
+  )
+
+  (pad "11" thru_hole circle
+    (at 7.62 -3.81)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "c9559a40-6764-4fda-8c3d-7f48d1369b4e")
+  )
+
+  (pad "12" thru_hole circle
+    (at 7.62 -1.27)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "ab57d9cf-7d8e-415c-911c-65ff4cc8ee36")
+  )
+
+  (pad "13" thru_hole circle
+    (at 7.62 1.27)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "1678014c-7faf-4c6f-949d-3818c7e26b42")
+  )
+
+  (pad "14" thru_hole circle
+    (at 7.62 3.81)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "f02b94a2-1e25-4cf3-a7d2-743a16a1587e")
+  )
+
+  (pad "15" thru_hole circle
+    (at 7.62 6.35)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "7d949400-8419-4c84-8c1b-ac035fcec0be")
+  )
+
+  (pad "16" thru_hole circle
+    (at 7.62 8.89)
+    (size 1.7 1.7)
+    (drill 1)
+    (layers "*.Cu" "*.Mask")
+    (uuid "6ae991d5-d408-434c-866b-f7d2351d7c4d")
+  )
+
+)
