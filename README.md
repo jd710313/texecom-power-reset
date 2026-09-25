@@ -474,20 +474,57 @@ create a connection that can't be soldered):
      5V) is at the USB end of the row nearest the relays.
 5. After testing, coat the board (no solder mask).
 
+**Milling order (double-sided, alignment pins, height map):**
+
+1. **Alignment-pin holes** first, outside the board outline, so the pins are
+   ready for the flip.
+2. **Bottom side:** probe a height map (no holes yet, so the probe can't drop
+   into one), then mill the **B.Cu isolation, mirrored** around the pin axis.
+3. **Flip** onto the alignment pins and probe a **new height map on the top**
+   (the top face isn't flat in the same way as the bottom).
+4. **Top isolation** (F.Cu, not mirrored).
+5. **Legend** (Mill_Legend, not mirrored) with the same V-bit, Z zero and
+   height map; see below.
+6. **Drill from the top** (drill file not mirrored), with a firm sacrificial
+   backing so exit burrs on the bottom pads stay small. Re-zero Z after each
+   drill change (the height map isn't needed for drilling through). Mill the
+   3.2mm M3 holes as circles if you don't have a 3.2mm drill.
+7. **Board outline last**, with holding tabs, so the board stays rigid and
+   clamped for everything else.
+8. Lightly deburr the bottom pads before soldering.
+
 **Engraving the legend (FlatCAM):**
+
+The legend Gerber is made of 0.15mm-wide lines. Normal isolation routing would
+cut *around* each line (a double outline); **Follow** geometry runs the tool
+once down the **centre** of each line, so the V-bit cuts a single thin groove.
 
 1. Load `fab/texecom-power-reset-Mill_Legend.gbr` together with the F.Cu
    Gerber. It shares their origin, so it lines up with the top isolation and
-   the alignment pins.
-2. On the legend Gerber object, create a **Follow** geometry (it cuts along the
-   centre of each 0.15mm line instead of isolating around it).
-3. Create a CNC job with the 30° V-bit at a **shallow depth, about −0.06mm**
-   (just through 35µm copper, giving a line about 0.13mm wide). Run it after the
-   top isolation, with the board still clamped in the same top-side setup.
-4. The legend was generated clear of everything on the top copper, so it only
-   ever cuts floating (unconnected) copper. If you change the layout, regenerate
-   it with `tools/make_legend.py` (run with KiCad's Python; see the script header)
-   rather than editing it by hand.
+   the alignment pins. Apply **exactly the same** offset or double-sided
+   move/mirror to the legend as to F.Cu (select both and apply it once).
+2. Make the Follow geometry:
+   - **FlatCAM Beta (8.99x):** select the legend Gerber, open the **Isolation
+     Routing** tool and tick **Follow**. Tool diameter and passes don't matter
+     with Follow. Generate: this creates a `…_follow` geometry.
+   - **FlatCAM 8.5:** select the legend Gerber; in the Selected tab under
+     *Isolation Routing* tick **Follow**, then *Generate Geometry*.
+   - Check the result: text, outlines and rings should be single centre
+     lines, not pairs of outlines.
+3. CNC job on the follow geometry: tool type **V-shape, 0.1mm tip, 30°**,
+   **Cut Z about −0.05 to −0.07mm** (just through 35µm copper, giving a line
+   about 0.12–0.14mm wide), **multi-depth off**. Use the feeds, speed and
+   travel Z from the top isolation job. A deeper cut widens the lines and blurs
+   the small text (1.2mm references, 1.5mm terminal labels), so try a short
+   test on scrap first.
+4. The cut is very shallow, so **use the top height map** (auto-levelling);
+   without it, lines fade out on high spots and cut wide on low ones.
+5. The legend was generated at least 0.35mm clear of everything on the top
+   copper, so even a slightly deep cut only marks floating (unconnected) copper.
+   If you change the layout, regenerate it with `tools/make_legend.py` (run with
+   KiCad's Python; see the script header) rather than editing it by hand.
+
+FlatCAM menu names differ a little between versions.
 
 ### 7. Tasmota configuration
 
