@@ -443,6 +443,36 @@
         </ol>
       </div>
     </div>
+    <div class="two">
+      <div class="panel">
+        <h3>Milling order</h3>
+        <ol class="steps">
+          <li><div><b>Alignment-pin holes</b>Outside the board outline, so the pins are ready for the flip.</div></li>
+          <li><div><b>Bottom side</b>Height map first (no holes yet), then B.Cu isolation, mirrored about the pin axis.</div></li>
+          <li><div><b>Flip and re-probe</b>Onto the alignment pins; probe a new height map on the top.</div></li>
+          <li><div><b>Top isolation</b>F.Cu, not mirrored.</div></li>
+          <li><div><b>Legend engrave</b>Mill_Legend with the same V-bit, Z zero and height map.</div></li>
+          <li><div><b>Drill from the top</b>Drill file not mirrored, firm sacrificial backing, re-zero Z after each drill change; mill the 3.2mm M3 holes if needed.</div></li>
+          <li><div><b>Board outline</b>Last, with holding tabs. Lightly deburr the bottom pads before soldering.</div></li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h3>Legend engrave in FlatCAM</h3>
+        <p>The legend Gerber is 0.15mm lines. Use <b>Follow</b> geometry (Isolation Routing → Follow) so the V-bit runs once down the centre of each line instead of isolating around it.</p>
+        <div class="tbl">
+          <table>
+            <tbody>
+              <tr><td>Tool</td><td>V-shape, 0.1mm tip, 30°</td></tr>
+              <tr><td>Cut Z</td><td class="mono">−0.05 to −0.07 mm</td></tr>
+              <tr><td>Line width</td><td>about 0.12–0.14 mm</td></tr>
+              <tr><td>Multi-depth</td><td>Off (single pass)</td></tr>
+              <tr><td>Auto-level</td><td>Use the top height map</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apply the same offset and double-sided move as F.Cu. Every line is at least 0.35mm clear of the top copper, so a deep cut only marks floating copper. Test the depth on scrap first.</p>
+      </div>
+    </div>
   </section>
 
   <section id="power">
