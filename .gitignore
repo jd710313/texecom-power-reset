@@ -1,0 +1,12 @@
+# KiCad temporary / local files
+*.lck
+*-backups/
+_autosave-*
+fp-info-cache
+*.kicad_sch-bak
+*.kicad_pcb-bak
+~*
+# Local tool / OS artefacts
+_avg_/
+Thumbs.db
+desktop.ini
