@@ -192,8 +192,8 @@ checks that AC is present before it resets (see below).
   about 8.5mm above the copper on the header sockets. If WiFi is weak inside the
   panel housing (especially a metal one), use the V2's **IPEX external-antenna
   option** (move the small antenna-select link as described on the module's
-  info page) and fit the optional 2.4GHz antenna from the BOM (Communica, IPEX
-  on a lead).
+  info page) and fit the optional U.FL antenna from the BOM (Micro Robotics
+  BAT-P60-WIFI-2, a stick-on flexible PCB antenna on a 100mm lead).
 
 ### 3. Hardware timeout: 74HCT4538 dual monostable (at 5V)
 

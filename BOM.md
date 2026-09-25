@@ -52,7 +52,7 @@ from **Communica** ([communica.co.za](https://www.communica.co.za)).
 | In-line blade fuse holder | 1 | **Micro Robotics** | [FUSE-INLINE-40A](https://www.robotics.org.za/FUSE-INLINE-40A) | 1 / R28 | In stock / In stock | **Recommended**, on battery + near the battery |
 | Blade fuse 3A | 1 | **Micro Robotics** | [BLADE-3A](https://www.robotics.org.za/BLADE-3A) | 10 / R15 | In stock / In stock | |
 | M3 nylon spacers, 15mm, with screws and nuts | 2–4 sets | **Micro Robotics** | [SPACE-M3-L15-KIT](https://www.robotics.org.za/SPACE-M3-L15-KIT) | 20 / R22 | In stock / In stock | The 10mm kit ([SPACE-M3-L10-KIT](https://www.robotics.org.za/SPACE-M3-L10-KIT)) is out of stock |
-| **External WiFi antenna** 2.4GHz 4dBi, enclosed, IPEX connector on lead (**optional**) | 1 | **Communica** | [BDD ENCL WIFI ANTENNA 2,4GHZ 4DB](https://www.communica.co.za/products/bdd-encl-wifi-antenna-2-4ghz-4db) | 1 / R25 | Available | For the SuperMini V2's IPEX socket, if WiFi is weak inside the panel housing (the module's antenna end points into the board). **Check the plug is IPEX-1 / U.FL (MHF1)**; the listing says "IPEX13", and the smaller IPEX-4 won't fit. To use it, move the V2's small antenna-select link from the ceramic antenna to the IPEX socket. |
+| **External WiFi antenna** 2.4GHz, flexible PCB 38 × 10mm, U.FL/IPEX on a ~100mm lead (**optional**) | 1 | **Micro Robotics** | [BAT-P60-WIFI-2](https://www.robotics.org.za/BAT-P60-WIFI-2) | 1 / R18 | In stock / In stock | For the SuperMini V2's IPEX socket, if WiFi is weak inside the panel housing (the module's antenna end points into the board). 3dBi omni, 2.4–5.9GHz; stick it to the inside of the housing, away from metal where possible. To use it, move the V2's small antenna-select link from the ceramic antenna to the IPEX socket. **Alternative:** Communica [BDD ENCL WIFI ANTENNA 2,4GHZ 4DB](https://www.communica.co.za/products/bdd-encl-wifi-antenna-2-4ghz-4db) (R25, 4dBi, IPEX on lead; check the plug is IPEX-1/U.FL, the listing says "IPEX13"). |
 
 ## No longer needed (on-board relay redesign)
 
@@ -69,9 +69,9 @@ from **Communica** ([communica.co.za](https://www.communica.co.za)).
 LED-03-RED (Centurion) or LED-RED-5MM, IC-SOC-16P, PTC05A24V, 1N5822-TH,
 CL31A106KAHNNNE, RES-100K-50, RES-1M-50 (Centurion), RES-10K-025, RES-1K-1206,
 RES-100-1206, RES-0E-50 (optional), AWG18-UL1007-RB-5M, FUSE-INLINE-40A,
-BLADE-3A, SPACE-M3-L15-KIT.
+BLADE-3A, SPACE-M3-L15-KIT, BAT-P60-WIFI-2 (optional antenna).
 
-**Communica:** 74HCT4538E (×1, or ×2 as a spare), P6KE 18A (×1), BDD ENCL WIFI ANTENNA 2,4GHZ 4DB (×1, optional).
+**Communica:** 74HCT4538E (×1, or ×2 as a spare), P6KE 18A (×1).
 
 **PCB:** milled in-house from on-hand copper-clad board.
 
