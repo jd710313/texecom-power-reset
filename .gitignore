@@ -10,3 +10,7 @@ fp-info-cache
 _avg_/
 Thumbs.db
 desktop.ini
+
+# MCP tool backups
+.mcp-backups/
+*_drc_violations.json

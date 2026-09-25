@@ -1,0 +1,31 @@
+(version 1)
+
+# CNC isolation-milled board (FlatCAM, 30deg V-bit, 0.1mm tip).
+# Extra isolation around every pad for easy hand soldering and multi-pass isolation.
+(rule "pad isolation"
+	(constraint clearance (min 0.8mm))
+	(condition "A.Type == 'Pad' || B.Type == 'Pad'"))
+
+# 16VAC lines swing about +/-23V relative to GND: keep them well away from logic.
+(rule "16VAC spacing"
+	(constraint clearance (min 1.0mm))
+	(condition "A.NetClass == 'AC16V' && B.NetClass != 'AC16V'"))
+
+# Vias are hand-soldered wire links.
+(rule "wire-link vias"
+	(constraint via_diameter (min 2.0mm))
+	(constraint hole_size (min 0.8mm)))
+
+# Milled board: covered pads are modelled as an NPTH hole inside its own B.Cu SMD pad
+# (no plated barrel; the lead is soldered to the bottom pad). A hole inside its OWN
+# footprint's pad is intended; holes near OTHER parts' pads are still checked.
+(rule "hole inside own milled pad"
+	(constraint hole_clearance (min 0mm))
+	(condition "A.Type == 'Pad' && B.Type == 'Pad' && ((A.memberOfFootprint('J1') && B.memberOfFootprint('J1')) || (A.memberOfFootprint('J2') && B.memberOfFootprint('J2')) || (A.memberOfFootprint('J3') && B.memberOfFootprint('J3')) || (A.memberOfFootprint('J4') && B.memberOfFootprint('J4')) || (A.memberOfFootprint('U1') && B.memberOfFootprint('U1')) || (A.memberOfFootprint('U2') && B.memberOfFootprint('U2')) || (A.memberOfFootprint('U3') && B.memberOfFootprint('U3')) || (A.memberOfFootprint('K1') && B.memberOfFootprint('K1')) || (A.memberOfFootprint('K2') && B.memberOfFootprint('K2')) || (A.memberOfFootprint('Q1') && B.memberOfFootprint('Q1')) || (A.memberOfFootprint('Q2') && B.memberOfFootprint('Q2')) || (A.memberOfFootprint('C1') && B.memberOfFootprint('C1')) || (A.memberOfFootprint('C3') && B.memberOfFootprint('C3')) || (A.memberOfFootprint('D6') && B.memberOfFootprint('D6')) || (A.memberOfFootprint('D7') && B.memberOfFootprint('D7')))"))
+
+# Covered pads (part body hides the top side) can only be soldered on the bottom:
+# the TOP pour must never connect to them (bottom pour connects normally).
+(rule "no top pour on covered pads"
+	(layer F.Cu)
+	(constraint zone_connection none)
+	(condition "A.Type == 'Pad' && (A.memberOfFootprint('J1') || A.memberOfFootprint('J2') || A.memberOfFootprint('J3') || A.memberOfFootprint('J4') || A.memberOfFootprint('U1') || A.memberOfFootprint('U2') || A.memberOfFootprint('U3') || A.memberOfFootprint('K1') || A.memberOfFootprint('K2') || A.memberOfFootprint('Q1') || A.memberOfFootprint('Q2') || A.memberOfFootprint('C1') || A.memberOfFootprint('C3') || A.memberOfFootprint('D6') || A.memberOfFootprint('D7'))"))

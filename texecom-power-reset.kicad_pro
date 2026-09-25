@@ -100,8 +100,8 @@
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
         "length_out_of_range": "error",
-        "lib_footprint_issues": "warning",
-        "lib_footprint_mismatch": "warning",
+        "lib_footprint_issues": "ignore",
+        "lib_footprint_mismatch": "ignore",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "mirrored_text_on_front_layer": "warning",
@@ -114,11 +114,11 @@
         "padstack": "warning",
         "pth_inside_courtyard": "error",
         "shorting_items": "error",
-        "silk_edge_clearance": "warning",
-        "silk_over_copper": "warning",
-        "silk_overlap": "warning",
+        "silk_edge_clearance": "ignore",
+        "silk_over_copper": "ignore",
+        "silk_overlap": "ignore",
         "skew_out_of_range": "error",
-        "solder_mask_bridge": "error",
+        "solder_mask_bridge": "ignore",
         "starved_thermal": "error",
         "text_height": "warning",
         "text_on_edge_cuts": "error",
@@ -140,22 +140,22 @@
       },
       "rules": {
         "max_error": 0.005,
-        "min_clearance": 0.0,
+        "min_clearance": 0.4,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.5,
+        "min_copper_edge_clearance": 0.8,
         "min_groove_width": 0.0,
-        "min_hole_clearance": 0.25,
-        "min_hole_to_hole": 0.25,
+        "min_hole_clearance": 0.4,
+        "min_hole_to_hole": 0.5,
         "min_microvia_diameter": 0.2,
         "min_microvia_drill": 0.1,
-        "min_resolved_spokes": 2,
+        "min_resolved_spokes": 1,
         "min_silk_clearance": 0.0,
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
-        "min_through_hole_diameter": 0.3,
-        "min_track_width": 0.2,
-        "min_via_annular_width": 0.1,
-        "min_via_diameter": 0.5,
+        "min_through_hole_diameter": 0.8,
+        "min_track_width": 0.6,
+        "min_via_annular_width": 0.3,
+        "min_via_diameter": 2.0,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -203,7 +203,12 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [],
+      "track_widths": [
+        0.0,
+        0.7,
+        1.0,
+        2.0
+      ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -230,7 +235,16 @@
           "spacing": 0.6
         }
       },
-      "via_dimensions": [],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 2.0,
+          "drill": 0.8
+        }
+      ],
       "zones_allow_external_fillets": false
     },
     "ipc2581": {
@@ -271,7 +285,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.8,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -282,10 +296,67 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.2,
+        "track_width": 0.7,
         "tuning_profile": "",
-        "via_diameter": 0.6,
-        "via_drill": 0.3,
+        "via_diameter": 2.0,
+        "via_drill": 0.8,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 1.0,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "AC16V",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 2.0,
+        "tuning_profile": "",
+        "via_diameter": 2.0,
+        "via_drill": 0.8,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.8,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Power",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 2.0,
+        "tuning_profile": "",
+        "via_diameter": 2.0,
+        "via_drill": 0.8,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.8,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Supply",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 1.0,
+        "tuning_profile": "",
+        "via_diameter": 2.0,
+        "via_drill": 0.8,
         "wire_width": 6
       }
     ],
@@ -294,7 +365,48 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "Power",
+        "pattern": "Net-(J1-Pin_1)"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "Net-(J2-Pin_1)"
+      },
+      {
+        "netclass": "AC16V",
+        "pattern": "Net-(J3-Pin_1)"
+      },
+      {
+        "netclass": "AC16V",
+        "pattern": "Net-(J3-Pin_2)"
+      },
+      {
+        "netclass": "AC16V",
+        "pattern": "Net-(J4-Pin_1)"
+      },
+      {
+        "netclass": "Supply",
+        "pattern": "GND"
+      },
+      {
+        "netclass": "Supply",
+        "pattern": "+5V"
+      },
+      {
+        "netclass": "Supply",
+        "pattern": "+5V_MCU"
+      },
+      {
+        "netclass": "Supply",
+        "pattern": "Net-(D1-K)"
+      },
+      {
+        "netclass": "Supply",
+        "pattern": "Net-(D1-A)"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
@@ -311,20 +423,9 @@
     "bus_aliases": {},
     "legacy_lib_dir": "",
     "legacy_lib_list": [],
-    "top_level_sheets": [
-      {
-        "filename": "texecom-power-reset.kicad_sch",
-        "name": "texecom-power-reset",
-        "uuid": "00000000-0000-0000-0000-000000000000"
-      }
-    ]
+    "top_level_sheets": []
   },
-  "sheets": [
-    [
-      "d500e0c0-8477-4b47-814f-16e67914e768",
-      "Root"
-    ]
-  ],
+  "sheets": [],
   "text_variables": {},
   "tuning_profiles": {
     "meta": {

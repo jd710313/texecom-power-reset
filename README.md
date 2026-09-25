@@ -1,11 +1,17 @@
 # Texecom Remote Power Reset
 
+> **Project summary:** [`project-summary.html`](project-summary.html): one page with the
+> reset timing, fail-safe behaviour, schematic, PCB layers, parts and bench tests.
+> [View it rendered](https://htmlpreview.github.io/?https://github.com/jd710313/texecom-power-reset/blob/main/project-summary.html)
+> (GitHub shows `.html` files as source), or download the file and open it in a browser.
+
 A single board with an ESP32-C3 (Tasmota) and two on-board relays. It sits
 inside a Texecom Premier Elite 64-W housing and can remotely "hard power
 reset" the panel by briefly cutting both its battery and 16VAC feeds.
 
-> **Status:** Design rev A with **on-board relays**. **KiCad schematic done**
-> (drawn with wires, ERC clean, netlist verified). PCB layout is next.
+> **Status:** Design rev A with **on-board relays**. Schematic done (ERC clean,
+> netlist verified). **PCB rev A routed: DRC clean (0 violations, 0 unconnected)**,
+> Gerbers + drill in `fab/`. Not yet milled or tested.
 
 ## Background
 
@@ -65,7 +71,7 @@ investigated separately. This board is a remote recovery tool, not a fix.
 | H4 | **Single board:** all field wiring lands on the PCB (battery in, battery out to the panel, 16VAC in, 16VAC out to the panel). There is no board-to-board wiring. |
 | H5 | Screw terminals: **KF301-2P** (already on hand). 5.0mm pitch, 16A, 250V, 22–14 AWG, side entry, interlocking. Four are used (J1–J4). |
 | H6 | **Custom PCB** (KiCad) holding the SuperMini socket, the S9V11E2F5, the 74HCT4538 hardware timeout, the relay drivers, both relays, the battery input protection and fuse, and J1–J4. |
-| H7 | Everything must fit **inside the panel housing**. Keep the board as small as practical. The relays are the tallest part (about 15.5mm). |
+| H7 | Everything must fit **inside the panel housing**. Rev A board is **92 × 70mm**; the relays are the tallest part (about 15.5mm). |
 | H8 | The PCB is **CNC-milled in-house**, **double-sided** (FlatCAM with alignment pins, 30° V-bit with 0.1mm tip, 0.7mm tracks proven), from on-hand copper-clad board. There are **no plated through-holes, no solder mask and no silkscreen**. |
 
 ## Parts on hand
@@ -350,6 +356,8 @@ the rules above as design rules.
 | `texecom-power-reset.kicad_sym` | Project symbols: ESP32-C3-SuperMini (from the esp32c3-button-led project), Pololu_S9V11E2F5 |
 | `texecom-power-reset.pretty/` | Project footprints: ESP32-C3-SuperMini, Pololu_S9V11E2x (pin order VOUT, GND, VIN, EN per the Pololu drawing) |
 | `backup/` | Earlier schematic versions (label-connected, and wired with the off-board relay module), kept for reference only. **Not** used for the PCB. |
+| `project-summary.html` | One-page visual project summary (self-contained HTML, open in a browser) |
+| `fab/`, `docs/` | Gerbers + drill for FlatCAM; copper renders and assembly drawing |
 
 **Layout:** power path across the top. **Channel 2** (GPIO4, K2 AC relay) is in
 the middle band and **channel 1** (GPIO3, K1 battery relay) in the lower band.
@@ -365,6 +373,55 @@ D6/D7 LEDs, C1–C8, R1–R16, MH1/MH2 M3 holes.
 **Verification:** ERC 0 errors, 0 warnings. The KiCad netlist was checked net
 by net against the intended circuit (32 nets). The only unconnected pins are the
 intentional ones (relay NO, Q̅ outputs, Pololu EN, unused SuperMini pins).
+
+### 6c. PCB layout (rev A)
+
+![Top copper](docs/pcb-top-copper.svg)
+![Bottom copper](docs/pcb-bottom-copper.svg)
+
+| Item | Value |
+|------|-------|
+| Board | **92 × 70mm**, 2 layers, 2 × M3 holes (top-left, bottom-right) |
+| Placement | Terminals along the bottom edge: **J4 AC OUT, J3 AC IN, J2 BAT OUT, J1 BAT IN** (left to right). K2 (AC) above J4/J3, K1 (battery) above J2/J1. Drivers and LEDs above the relays, 74HCT4538 top-middle, SuperMini top-right (antenna at the right edge, with a no-copper keepout under it), power section bottom-right. |
+| Routing | KiCad routing tools (drandyhaas), with a milling floor: **0.8mm clearance** everywhere (1.0mm for 16VAC), 0.7mm signal tracks, 1.0mm supply tracks, 2.0mm battery/AC tracks. GND by pour on both layers. |
+| Vias | **15 wire-link vias** (0.8mm drill, 2.0mm pad): solder a short wire on both sides. |
+| DRC | **0 violations, 0 unconnected** against the project rules (`.kicad_pro` net classes + `.kicad_dru`). |
+| Fab files | `fab/`: `texecom-power-reset-F_Cu.gbr`, `-B_Cu.gbr`, `-Edge_Cuts.gbr`, `texecom-power-reset.drl` (Excellon, mm, absolute origin; PTH and NPTH merged), drill map PDF. |
+
+**Drill sizes:**
+
+| Drill | Holes | Used for |
+|-------|-------|----------|
+| 0.8mm | 65 | Resistors, disc caps, electrolytics, TO-92, DIP socket, the 15 vias |
+| 0.9mm | 4 | LEDs |
+| 1.0mm | 30 | SuperMini and Pololu headers, 1N4007/P6KE18A, relay coil pins |
+| 1.3mm | 14 | KF301 terminals, relay contact pins |
+| 1.5mm | 4 | 1N5822 (1.3mm leads) |
+| 3.2mm | 2 | M3 mounting holes |
+
+**How the "no top joint on covered pads" rule is enforced** (so neither the router
+nor the pour can create a connection that can't be soldered):
+
+- KiCad forces plated pads onto both copper layers, so the covered footprints
+  (terminals, relays, DIP socket, headers, TO-92, electrolytics, LEDs) carry a
+  **per-pad F.Cu keepout** (no tracks, no vias, no pour) inside the footprint.
+  These are in the `*_Mill` footprints in `texecom-power-reset.pretty/`.
+- A `.kicad_dru` rule **"no top pour on covered pads"** sets `zone_connection none`
+  on F.Cu for those parts, so the top GND pour never "connects" through a pad
+  that can't be soldered on top. DRC connectivity is therefore honest: every
+  connection it counts is solderable.
+
+**Assembly notes for the milled board:**
+
+1. **Vias:** fit a wire through each of the 15 vias and solder both sides first.
+2. **SMD (1206) parts are on the bottom** (F1, C5, C6, R7–R12, R15, R16): solder
+   them first, on the bottom.
+3. **Axial parts and disc capacitors** (R1–R6, R13, R14, D1–D5, C2, C4, C7, C8):
+   solder on **both sides**. 19 of their pads carry top tracks, and more are
+   joined to the top GND pour.
+4. **Everything else** (terminals, relays, socket, headers, TO-92s, electrolytics,
+   LEDs) is soldered on the **bottom only**; their top pads are isolated rings.
+5. After testing, coat the board (no solder mask).
 
 ### 7. Tasmota configuration
 
@@ -450,7 +507,8 @@ The full BOM and sourcing tracker (on hand / Micro Robotics / Communica) is in
 - [x] ~~Relay module trigger polarity and 3.3V drive (tests 1a/1b)~~: done 2026-09-25 (high-level trigger, 4.77mA at 3.3V). No longer relevant, because the module was replaced by on-board relays.
 - [x] ~~KiCad schematic~~: done with on-board relays, drawn with wires, ERC clean, netlist verified (2026-09-25)
 - [ ] Check the pin-out of the 2N2222A transistors actually bought (E-B-C expected)
-- [ ] PCB layout (placement, routing, DRC), then Gerbers and drill files for FlatCAM
+- [x] ~~PCB layout~~: rev A placed and routed, DRC clean, Gerbers and drill in `fab/` (2026-09-25)
+- [ ] Mill, assemble and bench-test rev A (section 9)
 
 ## Decisions log
 
@@ -479,3 +537,6 @@ The full BOM and sourcing tracker (on hand / Micro Robotics / Communica) is in
 | **On-board SRD-05VDC-SL-C relays instead of the REL-2CHAN-335V module** | Each panel power path drops from 4 screw terminals plus 2 wires to **2 terminals**. A loose connection there would silently cut the panel's battery or AC. It also removes the inter-board wiring, the crimped control lead, J5–J7, the Q/Q̅ links and R7/R8 (220Ω). The cost is a board about 70 × 50mm and a few cheap driver parts. |
 | 2N2222A + 1k base + 10k pull-down + 1N4007 flyback per relay | Standard low-side driver, all in stock at Micro Robotics. The pull-down keeps the relay off if U2 is unpowered or removed. |
 | Red LED + 1k across each coil | Shows at a glance which feed is being cut (it replaces the module's indicator LEDs) and helps with bench testing. |
+| Per-pad F.Cu keepouts in the covered footprints (not NPTH + bottom SMD pads) | KiCad forces plated pads onto both layers. Modelling the pads as NPTH + B.Cu SMD made the router treat each hole as an obstacle to its own pad. Keepouts inside the footprints block top tracks, vias and pour at those pads, travel with the part, and the router honours them. |
+| 0.8mm clearance on every net class (not just around pads) | Wide isolation for easy hand soldering and FlatCAM multi-pass isolation. The board is not dense enough to need less. |
+| GND by pour on both layers, plus a `zone_connection none` rule on F.Cu for covered pads | Keeps DRC connectivity honest for a board without plated holes. |

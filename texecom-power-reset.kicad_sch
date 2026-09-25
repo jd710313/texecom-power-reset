@@ -3965,7 +3965,7 @@
 					)
 				)
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:KF301-2P_P5.00mm_Mill"
       (at 20.32 50.8 0)
       (hide yes)
       (show_name no)
@@ -4100,7 +4100,7 @@
 					)
 				)
     )
-    (property "Footprint" "Diode_THT:D_DO-201AD_P15.24mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:D_DO-201AD_P15.24mm_Mill"
       (at 63.5 55.245 0)
       (hide yes)
       (show_name no)
@@ -4165,7 +4165,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
+    (property "Footprint" "texecom-power-reset:CP_Radial_D6.3mm_P2.50mm_Mill"
       (at 77.165 50.8 0)
       (hide yes)
       (show_name no)
@@ -4230,7 +4230,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+    (property "Footprint" "texecom-power-reset:C_Disc_D5.0mm_W2.5mm_P5.00mm_Mill"
       (at 87.325 50.8 0)
       (hide yes)
       (show_name no)
@@ -4295,7 +4295,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Diode_THT:D_DO-15_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:D_DO-15_P10.16mm_Mill"
       (at 96.52 54.61 0)
       (hide yes)
       (show_name no)
@@ -4362,7 +4362,7 @@
 					)
 				)
     )
-    (property "Footprint" "texecom-power-reset:Pololu_S9V11E2x"
+    (property "Footprint" "texecom-power-reset:Pololu_S9V11E2x_Mill"
       (at 121.92 48.26 0)
       (hide yes)
       (show_name no)
@@ -4429,7 +4429,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:CP_Radial_D4.0mm_P1.50mm"
+    (property "Footprint" "texecom-power-reset:CP_Radial_D5.0mm_P2.50mm_Mill"
       (at 140.665 50.8 0)
       (hide yes)
       (show_name no)
@@ -4496,7 +4496,7 @@
 					)
 				)
     )
-    (property "Footprint" "Diode_THT:D_DO-201AD_P15.24mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:D_DO-201AD_P15.24mm_Mill"
       (at 160.02 55.245 0)
       (hide yes)
       (show_name no)
@@ -4563,7 +4563,7 @@
 					)
 				)
     )
-    (property "Footprint" "texecom-power-reset:ESP32-C3-SuperMini"
+    (property "Footprint" "texecom-power-reset:ESP32-C3-SuperMini_Mill"
       (at 48.26 190.5 0)
       (hide yes)
       (show_name no)
@@ -4642,7 +4642,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:KF301-2P_P5.00mm_Mill"
       (at 254 177.8 0)
       (hide yes)
       (show_name no)
@@ -4707,7 +4707,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:KF301-2P_P5.00mm_Mill"
       (at 254 91.44 0)
       (hide yes)
       (show_name no)
@@ -4772,7 +4772,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:KF301-2P_P5.00mm_Mill"
       (at 254 71.12 0)
       (hide yes)
       (show_name no)
@@ -4967,7 +4967,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+    (property "Footprint" "texecom-power-reset:C_Disc_D5.0mm_W2.5mm_P5.00mm_Mill"
       (at 336.245 120.65 0)
       (hide yes)
       (show_name no)
@@ -5099,7 +5099,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 97.282 118.11 90)
       (hide yes)
       (show_name no)
@@ -5166,7 +5166,7 @@
 					)
 				)
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 107.95 103.378 90)
       (hide yes)
       (show_name no)
@@ -5231,7 +5231,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+    (property "Footprint" "texecom-power-reset:C_Disc_D5.0mm_W2.5mm_P5.00mm_Mill"
       (at 125.425 101.6 0)
       (hide yes)
       (show_name no)
@@ -5296,7 +5296,7 @@
 						(size 1.27 1.27)
 					) (justify right))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 178.562 82.55 90)
       (hide yes)
       (show_name no)
@@ -5560,7 +5560,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 201.422 107.95 90)
       (hide yes)
       (show_name no)
@@ -5625,7 +5625,7 @@
     					(size 1.27 1.27)
     				) (justify left))
     )
-    (property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+    (property "Footprint" "texecom-power-reset:TO-92_Inline_Wide_Mill"
       (at 215.9 102.235 0)
       (hide yes)
       (show_name no)
@@ -5694,7 +5694,7 @@
     					(size 1.27 1.27)
     				) (justify left))
     )
-    (property "Footprint" "Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C"
+    (property "Footprint" "texecom-power-reset:Relay_SRD_Form_C_Mill"
       (at 229.87 82.55 0)
       (hide yes)
       (show_name no)
@@ -5764,7 +5764,7 @@
     					(size 1.27 1.27)
     				) (justify right))
     )
-    (property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:D_DO-41_P10.16mm_Mill"
       (at 205.74 83.82 0)
       (hide yes)
       (show_name no)
@@ -5895,7 +5895,7 @@
     					(size 1.27 1.27)
     				) (justify right))
     )
-    (property "Footprint" "LED_THT:LED_D3.0mm"
+    (property "Footprint" "texecom-power-reset:LED_D3.0mm_Mill"
       (at 198.12 87.63 0)
       (hide yes)
       (show_name no)
@@ -6027,7 +6027,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 97.282 224.79 90)
       (hide yes)
       (show_name no)
@@ -6094,7 +6094,7 @@
 					)
 				)
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 107.95 210.058 90)
       (hide yes)
       (show_name no)
@@ -6159,7 +6159,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+    (property "Footprint" "texecom-power-reset:C_Disc_D5.0mm_W2.5mm_P5.00mm_Mill"
       (at 125.425 208.28 0)
       (hide yes)
       (show_name no)
@@ -6224,7 +6224,7 @@
 						(size 1.27 1.27)
 					) (justify right))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 178.562 189.23 90)
       (hide yes)
       (show_name no)
@@ -6488,7 +6488,7 @@
 						(size 1.27 1.27)
 					) (justify left))
     )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:R_Axial_DIN0207_P10.16mm_Mill"
       (at 201.422 214.63 90)
       (hide yes)
       (show_name no)
@@ -6553,7 +6553,7 @@
     					(size 1.27 1.27)
     				) (justify left))
     )
-    (property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+    (property "Footprint" "texecom-power-reset:TO-92_Inline_Wide_Mill"
       (at 215.9 208.915 0)
       (hide yes)
       (show_name no)
@@ -6622,7 +6622,7 @@
     					(size 1.27 1.27)
     				) (justify left))
     )
-    (property "Footprint" "Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C"
+    (property "Footprint" "texecom-power-reset:Relay_SRD_Form_C_Mill"
       (at 229.87 189.23 0)
       (hide yes)
       (show_name no)
@@ -6692,7 +6692,7 @@
     					(size 1.27 1.27)
     				) (justify right))
     )
-    (property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
+    (property "Footprint" "texecom-power-reset:D_DO-41_P10.16mm_Mill"
       (at 205.74 190.5 0)
       (hide yes)
       (show_name no)
@@ -6823,7 +6823,7 @@
     					(size 1.27 1.27)
     				) (justify right))
     )
-    (property "Footprint" "LED_THT:LED_D3.0mm"
+    (property "Footprint" "texecom-power-reset:LED_D3.0mm_Mill"
       (at 198.12 194.31 0)
       (hide yes)
       (show_name no)
@@ -6890,7 +6890,7 @@
 					)
 				)
     )
-    (property "Footprint" "Package_DIP:DIP-16_W7.62mm_Socket"
+    (property "Footprint" "texecom-power-reset:DIP-16_W7.62mm_Socket_Mill"
       (at 175.26 214.63 0)
       (hide yes)
       (show_name no)
@@ -6962,7 +6962,7 @@
 					)
 				)
     )
-    (property "Footprint" "Package_DIP:DIP-16_W7.62mm_Socket"
+    (property "Footprint" "texecom-power-reset:DIP-16_W7.62mm_Socket_Mill"
       (at 175.26 107.95 0)
       (hide yes)
       (show_name no)
@@ -7032,7 +7032,7 @@
 						(size 1.27 1.27)
 					) (justify right))
     )
-    (property "Footprint" "Package_DIP:DIP-16_W7.62mm_Socket"
+    (property "Footprint" "texecom-power-reset:DIP-16_W7.62mm_Socket_Mill"
       (at 325.12 125.73 0)
       (hide yes)
       (show_name no)
