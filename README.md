@@ -605,6 +605,45 @@ the panel.
 The full BOM and sourcing tracker (on hand / Micro Robotics / Communica) is in
 **[BOM.md](BOM.md)**.
 
+## Commercial alternative: ESP8266 2 × 30A relay board
+
+If milling the custom board isn't worth it, Micro Robotics'
+[ESP8266-2CH-30A](https://www.robotics.org.za/ESP8266-2CH-30A) (R236, 83 × 68mm)
+can do the same job with the same wiring (checked against its
+[schematic](https://github.com/microrobotics/ESP8266-2CH-30A/blob/main/Schematic_ESP8266-2CH-30A.jpg)):
+
+- **Wiring:** battery + through relay 1 (COM → **NC**), one AC line through
+  relay 2 (COM → **NC**); battery − and the other AC line straight to the
+  panel. Power the board (7–28V input, LM2596 5V buck) from the battery side
+  of relay 1's COM, through the **inline blade fuse** from the BOM, so it's
+  never switched off with the panel.
+- **Fail-safe:** each relay has an NPN driver with a 1k base resistor and a
+  **10k pull-down**, plus a flyback diode and LED. If the ESP crashes, reboots or
+  is removed, the relays drop out and the panel keeps its power.
+- **Move relay 1 off GPIO16.** The relays reach the ESP through links on header
+  P5 (Relay 1 ↔ GPIO16, Relay 2 ↔ GPIO14). GPIO16 goes high briefly at boot,
+  which could blip the battery relay on every ESP restart, so wire Relay 1 to
+  **GPIO12 or GPIO13** instead (both brought out on P5, no boot glitch).
+- **Tasmota** (`tasmota.bin`, Generic module): Relay1 = GPIO12 (or 13),
+  Relay2 = GPIO14, Button1 = GPIO0, LedLink_i = GPIO5 (blue LED; check the
+  polarity). Use the same `PowerOnState 0; PulseTime1 30; PulseTime2 35`.
+  Flash through the UART header with a 3.3V USB-TTL adapter (IO0 to GND while
+  flashing); later updates go over the air.
+
+**What it gives up compared with the custom board:**
+
+| | Custom board | ESP8266-2CH-30A |
+|---|---|---|
+| Hardware timeout (S3) | 74HCT4538 releases the relays after about 7 s even if the firmware hangs with a GPIO high | None. Relies on `PulseTime` and the ESP8266 watchdog (a reset floats the pins and the pull-downs release the relays). A firmware bug that keeps the pin high while the chip keeps running isn't covered. |
+| Idle current from the battery | about 11–15mA | about 25–40mA (ESP8266 plus a non-synchronous buck); fine with solar backing |
+| Flashing | USB-C, in place | UART header and USB-TTL adapter; OTA afterwards |
+| Antenna | Ceramic, plus the V2's IPEX external-antenna option | ESP-12F PCB antenna only (could be weak inside a metal housing) |
+| Build effort | Mill, drill and assemble | Buy, move one link, wire up |
+
+Verdict: a sound substitute, especially with relay 1 moved to GPIO12/13. The
+custom board is kept for the hardware timeout, lower idle current, USB-C
+flashing and the external-antenna option.
+
 ## Open items
 
 - [ ] Free space inside the 64-W housing (dimensions still to come), including height for the relays (about 15.5mm)
