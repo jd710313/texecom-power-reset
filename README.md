@@ -11,7 +11,8 @@ reset" the panel by briefly cutting both its battery and 16VAC feeds.
 
 > **Status:** Design rev A with **on-board relays**. Schematic done (ERC clean,
 > netlist verified). **PCB rev A routed: DRC clean (0 violations, 0 unconnected)**,
-> Gerbers + drill in `fab/`. Not yet milled or tested.
+> GND pour on the bottom only, with an **engraved top legend** (`Mill_Legend`).
+> Gerbers + drill + legend in `fab/`. Not yet milled or tested.
 
 ## Background
 
@@ -315,7 +316,8 @@ PTC (which sits downstream) can do anything.
 - **Through-hole wherever possible:** axial resistors and diodes, radial
   capacitors, TO-92, DIP-16 in a socket, 2.54mm headers. **1206 SMD is
   acceptable** (hand-solderable) and is used for F1, C5/C6 and several resistors.
-- GND pour on both layers, except the antenna keep-out.
+- GND pour on the **bottom layer only**, except the antenna keep-out. The top
+  layer carries only tracks, pads and the engraved legend (§6a).
 - 2 × M3 mounting holes.
 
 ### 6a. CNC-milling rules (H8)
@@ -338,9 +340,9 @@ silkscreen**, so the layout follows these rules:
 | **Oval, oversized pads** (for example 2.0 × 3.0mm for 0.8–1.0mm holes, bigger for terminals, relays and the 1N5822s). | User's standard practice for easy hand soldering |
 | **Extra clearance around pads:** a custom KiCad rule of **at least 0.8mm from any pad to other copper** (tracks at 0.4mm to each other), plus **component spacing** that keeps neighbouring pads and bodies well clear. | The user prefers wider isolation around pads for easy hand soldering and no solder bridges. FlatCAM's multi-pass isolation needs room to widen the cut around pads without eating into neighbouring traces. |
 | **Drill sizes:** 0.8mm (resistors, small capacitors, LEDs, TO-92, vias), 1.0mm (headers, IC socket, 1N4007, 0Ω links), 1.3–1.5mm (KF301, relay pins, 1N5822 at 1.3mm leads, C1), 3.2mm (M3 mounting holes). | Few tool changes |
-| **Leave the unused copper as a GND pour** on both layers, cleared around holes. | Faster milling and better grounding. The top GND pour is also a natural place for top-side joints. |
+| **GND pour on the bottom only.** The top layer has no pour; its unused copper stays as floating copper and carries the engraved legend. | Faster milling and good grounding on the bottom. A top pour would reach pads that can't be soldered on top, and it would leave nowhere to engrave the legend. |
 | **SuperMini antenna** overhangs the board edge. | No copper needs pocketing out from under it. |
-| **Labels** (J1–J4 names, polarity, K1/K2, LED meaning) are **engraved into the copper** as V-bit text. | No silkscreen |
+| **Legend engraved into the top copper** from the `Mill_Legend` layer (User.1): part outlines, polarity and pin-1 marks, references, and the terminal labels BAT IN / BAT OUT / AC IN / AC OUT with + / − on the battery terminals. Generated so every line stays **at least 0.35mm clear of any top copper feature or hole** (plus half the line width), so an engrave can never cut a track or pad. | No silkscreen. The legend shows where each part goes. |
 | After testing, **coat the board** (conformal coat or clear lacquer). | No solder mask, and the board lives in the panel for years. |
 
 **Routing:** I place the parts and then try routing. If that's poor, use the
@@ -357,7 +359,11 @@ the rules above as design rules.
 | `texecom-power-reset.pretty/` | Project footprints: ESP32-C3-SuperMini, Pololu_S9V11E2x (pin order VOUT, GND, VIN, EN per the Pololu drawing) |
 | `backup/` | Earlier schematic versions (label-connected, and wired with the off-board relay module), kept for reference only. **Not** used for the PCB. |
 | `project-summary.html` | One-page visual project summary (self-contained HTML, open in a browser) |
-| `fab/`, `docs/` | Gerbers + drill for FlatCAM; copper renders and assembly drawing |
+| `fab/` | **Reference export** (maintained with the design): Gerbers F.Cu / B.Cu / Edge.Cuts / Mill_Legend, Excellon drill, drill map |
+| `kicad-output/` | Working KiCad output folder used for milling (Gerbers, drill and anything else needed) |
+| `flatcam/` | FlatCAM work: project files and generated G-code |
+| `docs/` | Copper renders (top includes the legend), 3D renders and the assembly drawing |
+| `tools/make_legend.py` | Regenerates the `Mill_Legend` engrave layer, kept clear of all top copper |
 
 **Layout:** power path across the top. **Channel 2** (GPIO4, K2 AC relay) is in
 the middle band and **channel 1** (GPIO3, K1 battery relay) in the lower band.
@@ -383,45 +389,61 @@ intentional ones (relay NO, Q̅ outputs, Pololu EN, unused SuperMini pins).
 |------|-------|
 | Board | **92 × 70mm**, 2 layers, 2 × M3 holes (top-left, bottom-right) |
 | Placement | Terminals along the bottom edge: **J4 AC OUT, J3 AC IN, J2 BAT OUT, J1 BAT IN** (left to right). K2 (AC) above J4/J3, K1 (battery) above J2/J1. Drivers and LEDs above the relays, 74HCT4538 top-middle, SuperMini top-right (antenna at the right edge, with a no-copper keepout under it), power section bottom-right. |
-| Routing | KiCad routing tools (drandyhaas), with a milling floor: **0.8mm clearance** everywhere (1.0mm for 16VAC), 0.7mm signal tracks, 1.0mm supply tracks, 2.0mm battery/AC tracks. GND by pour on both layers. |
-| Vias | **15 wire-link vias** (0.8mm drill, 2.0mm pad): solder a short wire on both sides. |
+| Routing | KiCad routing tools (drandyhaas), with a milling floor: **0.8mm clearance** everywhere (1.0mm for 16VAC), 0.7mm signal tracks, 1.0mm supply tracks, 2.0mm battery/AC tracks. GND by a **bottom-layer pour only**, plus a few GND tracks. |
+| Vias | **16 wire-link vias** (0.8mm drill, 2.0mm pad): solder a short wire on both sides. |
+| Legend | `Mill_Legend` layer (User.1), engraved into the top copper with the V-bit. See *Engraving the legend* below. |
 | DRC | **0 violations, 0 unconnected** against the project rules (`.kicad_pro` net classes + `.kicad_dru`). |
-| Fab files | `fab/`: `texecom-power-reset-F_Cu.gbr`, `-B_Cu.gbr`, `-Edge_Cuts.gbr`, `texecom-power-reset.drl` (Excellon, mm, absolute origin; PTH and NPTH merged), drill map PDF. |
+| Fab files | `fab/`: `texecom-power-reset-F_Cu.gbr`, `-B_Cu.gbr`, `-Edge_Cuts.gbr`, `-Mill_Legend.gbr` (legend engrave), `texecom-power-reset.drl` (Excellon, mm, absolute origin; PTH and NPTH merged), drill map PDF. |
 
 **Drill sizes:**
 
 | Drill | Holes | Used for |
 |-------|-------|----------|
-| 0.8mm | 65 | Resistors, disc caps, electrolytics, TO-92, DIP socket, the 15 vias |
+| 0.8mm | 66 | Resistors, disc caps, electrolytics, TO-92, DIP socket, the 16 vias |
 | 0.9mm | 4 | LEDs |
 | 1.0mm | 30 | SuperMini and Pololu headers, 1N4007/P6KE18A, relay coil pins |
 | 1.3mm | 14 | KF301 terminals, relay contact pins |
 | 1.5mm | 4 | 1N5822 (1.3mm leads) |
 | 3.2mm | 2 | M3 mounting holes |
 
-**How the "no top joint on covered pads" rule is enforced** (so neither the router
-nor the pour can create a connection that can't be soldered):
+**How the "no top joint on covered pads" rule is enforced** (so the router can't
+create a connection that can't be soldered):
 
 - KiCad forces plated pads onto both copper layers, so the covered footprints
   (terminals, relays, DIP socket, headers, TO-92, electrolytics, LEDs) carry a
   **per-pad F.Cu keepout** (no tracks, no vias, no pour) inside the footprint.
   These are in the `*_Mill` footprints in `texecom-power-reset.pretty/`.
-- A `.kicad_dru` rule **"no top pour on covered pads"** sets `zone_connection none`
-  on F.Cu for those parts, so the top GND pour never "connects" through a pad
-  that can't be soldered on top. DRC connectivity is therefore honest: every
+- There is **no top pour** at all. The `.kicad_dru` rule **"no top pour on
+  covered pads"** (`zone_connection none` on F.Cu) is kept as a guard in case a
+  top pour is ever added again. DRC connectivity is therefore honest: every
   connection it counts is solderable.
 
 **Assembly notes for the milled board:**
 
-1. **Vias:** fit a wire through each of the 15 vias and solder both sides first.
+1. **Vias:** fit a wire through each of the 16 vias and solder both sides first.
 2. **SMD (1206) parts are on the bottom** (F1, C5, C6, R7–R12, R15, R16): solder
    them first, on the bottom.
 3. **Axial parts and disc capacitors** (R1–R6, R13, R14, D1–D5, C2, C4, C7, C8):
-   solder on **both sides**. 19 of their pads carry top tracks, and more are
-   joined to the top GND pour.
+   solder on **both sides** where a top track meets the pad (20 pads). The
+   rest only need the bottom joint, but a top fillet does no harm.
 4. **Everything else** (terminals, relays, socket, headers, TO-92s, electrolytics,
    LEDs) is soldered on the **bottom only**; their top pads are isolated rings.
 5. After testing, coat the board (no solder mask).
+
+**Engraving the legend (FlatCAM):**
+
+1. Load `fab/texecom-power-reset-Mill_Legend.gbr` together with the F.Cu
+   Gerber. It shares their origin, so it lines up with the top isolation and
+   the alignment pins.
+2. On the legend Gerber object, create a **Follow** geometry (it cuts along the
+   centre of each 0.15mm line instead of isolating around it).
+3. Create a CNC job with the 30° V-bit at a **shallow depth, about −0.06mm**
+   (just through 35µm copper, giving a line about 0.13mm wide). Run it after the
+   top isolation, with the board still clamped in the same top-side setup.
+4. The legend was generated clear of everything on the top copper, so it only
+   ever cuts floating (unconnected) copper. If you change the layout, regenerate
+   it with `tools/make_legend.py` (run with KiCad's Python; see the script header)
+   rather than editing it by hand.
 
 ### 7. Tasmota configuration
 
@@ -539,4 +561,5 @@ The full BOM and sourcing tracker (on hand / Micro Robotics / Communica) is in
 | Red LED + 1k across each coil | Shows at a glance which feed is being cut (it replaces the module's indicator LEDs) and helps with bench testing. |
 | Per-pad F.Cu keepouts in the covered footprints (not NPTH + bottom SMD pads) | KiCad forces plated pads onto both layers. Modelling the pads as NPTH + B.Cu SMD made the router treat each hole as an obstacle to its own pad. Keepouts inside the footprints block top tracks, vias and pour at those pads, travel with the part, and the router honours them. |
 | 0.8mm clearance on every net class (not just around pads) | Wide isolation for easy hand soldering and FlatCAM multi-pass isolation. The board is not dense enough to need less. |
-| GND by pour on both layers, plus a `zone_connection none` rule on F.Cu for covered pads | Keeps DRC connectivity honest for a board without plated holes. |
+| ~~GND by pour on both layers~~ (superseded below), plus a `zone_connection none` rule on F.Cu for covered pads | Keeps DRC connectivity honest for a board without plated holes. |
+| **GND pour on the bottom only; the top copper carries an engraved legend** (2026-09-25) | The top pour added little: GND is well connected on the bottom, and three pads needed only short re-routes (one extra via). Without it, the free top copper can take a V-bit legend (outlines, references, BAT/AC terminal labels) to guide assembly. The legend is pre-clipped 0.35mm clear of all top copper, so it can't cut a track or pad. |
