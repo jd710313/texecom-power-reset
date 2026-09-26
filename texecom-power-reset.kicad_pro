@@ -636,7 +636,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "kicad-output/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""

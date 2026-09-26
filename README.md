@@ -489,8 +489,10 @@ create a connection that can't be soldered):
    backing so exit burrs on the bottom pads stay small. Re-zero Z after each
    drill change (the height map isn't needed for drilling through). Mill the
    3.2mm M3 holes as circles if you don't have a 3.2mm drill.
-7. **Board outline last**, with holding tabs, so the board stays rigid and
-   clamped for everything else.
+7. **Board outline last** (2.4mm tool, 4 passes to −2.0mm, no tabs). The board
+   is held on **double-sided tape**, so it stays put after the final pass; tape
+   near the edges as well as the middle. The drills go through the tape, so
+   clean adhesive off the small bits if holes start to come out ragged.
 8. Lightly deburr the bottom pads before soldering.
 
 **Engraving the legend (FlatCAM):**
