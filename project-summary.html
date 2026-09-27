@@ -456,9 +456,9 @@
         <h3>Milling order</h3>
         <ol class="steps">
           <li><div><b>Alignment-pin holes</b>Outside the board outline, so the pins are ready for the flip. With a 2.4mm fishtail at 12,000rpm: plunge at 100–150mm/min in 1mm steps with full retracts (−1, −2, −3mm), and vacuum the dust. Test the pin fit on scrap.</div></li>
-          <li><div><b>Bottom side</b>Height map first (no holes yet), then B.Cu isolation, mirrored about the pin axis.</div></li>
+          <li><div><b>Bottom side</b>Height map first (no holes yet), then B.Cu isolation, mirrored about the pin axis: 4 passes, 15–20% overlap.</div></li>
           <li><div><b>Flip and re-probe</b>Onto the alignment pins; probe a new height map on the top.</div></li>
-          <li><div><b>Top isolation</b>F.Cu, not mirrored.</div></li>
+          <li><div><b>Top isolation</b>F.Cu, not mirrored, 4 passes. One pass leaves only about 0.14mm to the floating top copper (solder bridges) and copper slivers in the 0.8mm bottom gaps; 4 passes give about 0.5mm and clear the gaps. Check for slivers and shorts with a knife and a continuity meter before soldering.</div></li>
           <li><div><b>Legend engrave</b>Mill_Legend with the same V-bit, Z zero and height map.</div></li>
           <li><div><b>Drill from the top</b>Drill file not mirrored, firm sacrificial backing, re-zero Z after each drill change; mill the 3.2mm M3 holes if needed. Z feed at 12,000rpm: 0.8mm 60–90, 1.0mm 80–120, 1.5mm 100–150, 3.2mm 120–180mm/min; single plunge to −2.0mm.</div></li>
           <li><div><b>Board outline</b>Last, no tabs: the board is held on double-sided tape (tape near the edges too). Lightly deburr the bottom pads before soldering.</div></li>

@@ -496,10 +496,11 @@ The vias carry the same numbers on both.
 1. **Alignment-pin holes** first, outside the board outline, so the pins are
    ready for the flip.
 2. **Bottom side:** probe a height map (no holes yet, so the probe can't drop
-   into one), then mill the **B.Cu isolation, mirrored** around the pin axis.
+   into one), then mill the **B.Cu isolation, mirrored** around the pin axis
+   (**4 passes**, see *Isolation passes* below).
 3. **Flip** onto the alignment pins and probe a **new height map on the top**
    (the top face isn't flat in the same way as the bottom).
-4. **Top isolation** (F.Cu, not mirrored).
+4. **Top isolation** (F.Cu, not mirrored, **4 passes**).
 5. **Legend** (Mill_Legend, not mirrored) with the same V-bit, Z zero and
    height map; see below.
 6. **Drill from the top** (drill file not mirrored), with a firm sacrificial
@@ -511,6 +512,41 @@ The vias carry the same numbers on both.
    near the edges as well as the middle. The drills go through the tape, so
    clean adhesive off the small bits if holes start to come out ragged.
 8. Lightly deburr the bottom pads before soldering.
+
+**Isolation passes (copper layers): use 4, not 1**
+
+The first board was milled with **one pass** of the V-bit (about 0.14mm wide at
+−0.07mm). Isolation routing cuts a line **around the outline** of each copper
+shape; it doesn't clear the space *between* shapes. With one pass:
+
+- **Top:** there's no pour, so every pad and track sits in unused, floating
+  copper only about 0.14mm away. Solder can bridge a pad to that copper, and if
+  the same piece touches another pad, you get a short.
+- **Bottom:** the Gerber has 0.8mm gaps between tracks, pads and the GND pour.
+  One pass traces *both edges* of each gap: narrow gaps get cleared completely
+  (the cuts merge), wider or irregular ones (for example around thermal-relief
+  spokes) keep a **sliver of copper** between the two cuts. That's why the
+  separation looked wide in some places and thin in others.
+
+Settings for both copper layers (FlatCAM Beta, Isolation tool):
+
+| Setting | Value |
+|---|---|
+| Passes | **4** |
+| Overlap | **15–20%** |
+| Combine | On (all passes in one job) |
+| Tool, depth, height map | Unchanged (30° V-bit, 0.1mm tip, −0.07mm, auto-level) |
+
+That gives about 0.45–0.5mm of isolation from every copper edge: the 0.8mm
+bottom gaps are cleared completely (no slivers, even look), and the top pads get
+about 0.5mm to the floating copper. The **legend stays a single Follow pass**.
+FlatCAM's Non-Copper Clearing would remove all unused copper, but with a 0.1mm
+V-bit it's very slow; the extra passes give the clearance that matters.
+
+**Checking a milled board:** under magnification, scrape out any copper slivers
+with a sharp hobby knife and brush the dust away. Then check with a continuity
+meter for shorts between neighbouring pads, and from each pad to the copper
+around it, especially the terminal, relay and 5V pads, before soldering.
 
 **Alignment holes with a 2.4mm fishtail end mill (at 12,000rpm):**
 
