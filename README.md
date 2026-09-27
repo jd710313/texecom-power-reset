@@ -495,6 +495,45 @@ create a connection that can't be soldered):
    clean adhesive off the small bits if holes start to come out ragged.
 8. Lightly deburr the bottom pads before soldering.
 
+**Alignment holes with a 2.4mm fishtail end mill (at 12,000rpm):**
+
+| Setting | Value | Why |
+|---|---|---|
+| Z (plunge) feed | **100–150mm/min** (no more than about 200) | About 0.0125mm/rev, or 0.006mm per flute on a 2-flute bit: enough to cut chips in FR4. The earlier 60mm/min tends to rub, which heats the resin, glazes the hole and dulls the bit. A fishtail isn't a drill (no point, no self-centring), and hobby machines flex under heavier plunges. |
+| Step-down | **1mm per step**, full retract between steps (−1, −2, −3mm) | Clears the fibreglass dust; 3mm total is a 1.6mm board plus about 1.4mm into the spoilboard for the pins. |
+| Dust | Vacuum while drilling | Fibreglass dust packs into the flutes. |
+
+- **Pin fit:** a flat-bottomed end-mill hole comes out very close to the bit
+  size. If the pins are also 2.4mm, test on scrap first. If they're too tight,
+  use a slightly smaller pin, or mill the holes (FlatCAM "mill holes") for a snug
+  sliding fit.
+- **First hole:** if the bit squeals or the resin turns brown, increase the feed
+  a little rather than slowing down.
+- These are general carbide-in-FR4 figures for hobby spindles; if the bit's
+  supplier lists feeds, use those.
+
+**Hole drills at 12,000rpm (carbide PCB drills in FR4):**
+
+| Drill | Holes | Z (plunge) feed |
+|---|---|---|
+| 0.8mm | 66 | **60–90mm/min** |
+| 1.0mm (includes the 0.9mm LED holes) | 34 | **80–120mm/min** |
+| 1.5mm (includes the 1.3mm terminal and relay-contact holes) | 18 | **100–150mm/min** |
+| 3.2mm (M3) | 2 | **120–180mm/min** |
+
+- PCB drills are designed for 30,000–100,000rpm. At 12,000rpm each turn must
+  take a smaller bite, or thin bits break, so the feed scales with the diameter
+  (about 0.005–0.015mm per revolution).
+- A single plunge to −2.0mm (no pecking) is fine for a 1.6mm board at these
+  sizes. Set **Feedrate Z per tool** in FlatCAM's drilling job and regenerate the
+  drill G-code.
+- The **0.8mm bit is the fragile one**: keep it at the low end, make sure it
+  runs true, and clean tape adhesive off it. On the larger bits, if a bit
+  squeals or the hole edges go brown, raise the feed a step rather than slowing
+  down.
+- These are general figures for hobby spindles; if the drill supplier lists
+  feeds, use those.
+
 **Engraving the legend (FlatCAM):**
 
 The legend Gerber is made of 0.15mm-wide lines. Normal isolation routing would
