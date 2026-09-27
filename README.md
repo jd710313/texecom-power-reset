@@ -373,8 +373,9 @@ the rules above as design rules.
 | `fab/` | **Reference export** (maintained with the design): Gerbers F.Cu / B.Cu / Edge.Cuts / Mill_Legend, Excellon drill, drill map |
 | `kicad-output/` | Working KiCad output folder used for milling (Gerbers, drill and anything else needed) |
 | `flatcam/` | FlatCAM work: project files and generated G-code |
-| `docs/` | Copper renders (top includes the legend), 3D renders and the assembly drawing |
+| `docs/` | Copper renders (top includes the legend), 3D renders, and the **top and bottom assembly drawings** (`pcb-assembly-top` / `pcb-assembly-bottom`, SVG + PDF) |
 | `tools/make_legend.py` | Regenerates the `Mill_Legend` engrave layer, kept clear of all top copper |
+| `tools/make_assembly.py` | Regenerates the top and bottom assembly drawings (SVG + PDF) from the board |
 
 **Layout:** power path across the top. **Channel 2** (GPIO3, K2 AC relay) is in
 the middle band and **channel 1** (GPIO4, K1 battery relay) in the lower band.
@@ -430,6 +431,22 @@ create a connection that can't be soldered):
   connection it counts is solderable.
 
 **Assembly notes for the milled board:**
+
+Two assembly drawings, both printable at 2:1 on A4 landscape (print at 100%).
+The vias carry the same numbers on both.
+
+- **Top side** ([PDF](docs/pcb-assembly-top.pdf)): every top-side part with
+  its reference and value, its outline with polarity and pin-1 marks, and the
+  20 pads that need a top solder joint ringed in orange (the same pads as the
+  rings on the engraved legend).
+- **Bottom side** ([PDF](docs/pcb-assembly-bottom.pdf)): there's no silkscreen
+  on the bottom, so this shows the board as seen from below (mirrored), with the
+  eleven 1206 parts labelled and all 16 vias numbered. The through-hole parts
+  appear in grey for orientation.
+
+![Top-side assembly drawing](docs/pcb-assembly-top.svg)
+
+![Bottom-side assembly drawing](docs/pcb-assembly-bottom.svg)
 
 1. **Vias:** fit a wire through each of the 16 vias and solder both sides first.
 2. **SMD (1206) parts are on the bottom** (F1, C5, C6, R7–R12, R15, R16): solder
